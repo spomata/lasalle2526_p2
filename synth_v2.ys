@@ -1,0 +1,24 @@
+# synth_fifo.ys
+# Synthesize fifo using Nangate45 cells
+
+# 1) Read technology library (for mapping)
+read_liberty -lib nangate45_typ.lib
+
+# 2) Read RTL
+read_verilog fifo_single_clock_reg_v2.v
+
+# 3) Generic synthesis
+synth -top fifo_single_clock_reg_v2
+
+# 4) Map flip-flops to Nangate45 cells
+dfflibmap -liberty nangate45_typ.lib
+
+# 5) Map combinational logic to Nangate45 cells
+abc -liberty nangate45_typ.lib
+
+# 6) Clean
+opt_clean -purge
+
+# 7) Write out netlist
+write_verilog -noattr netlist_v2.v
+
